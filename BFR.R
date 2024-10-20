@@ -6,8 +6,8 @@
 #
 #  Script executes BFR algorithm on some synthetic data files in directory
 #  testdata/. All features of the synthetic data are used for clustering. File names
-#  indicate the distribution the data were drawn from (N) number of rows (500, 4000) and
-#  number of features (x2, x5).
+#  indicate the distribution the data were drawn from (N for normal, U for
+#  uniform distribution), number of rows (500, 4000) and number of features (x2, x5).
 #
 #  The results of BFR clustering are evaluated using the Silhouette sore [1, 2, 3] and 
 #  displayed with the Silhouette score of a clustering using the traditional K-means algorithm. 
@@ -25,7 +25,7 @@
 # 
 #  Required libraries: 
 #     1) LaF (for chunk-based reading of files)
-#     2) cluster (for silhouette calculation)
+#     2) cluster (for K-means silhouette calculation)
 #     3) BFR_Implementation.R (implementation of BFR)
 #
 #
@@ -47,13 +47,13 @@ cat("\014")
 
 options(scipen=8)
 
-# Fix this
-setwd("MyCode/BFR-Clustering/")
+# Set properly this!
+setwd("/BFR-Clustering/")
 
 
 
 
-library('LaF')
+library(LaF)
 library(cluster)
 
 # Contains the BFR implementation used by this script 
