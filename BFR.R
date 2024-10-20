@@ -47,7 +47,8 @@ cat("\014")
 
 options(scipen=8)
 
-setwd("/Users/manolistzagarakis/users/tzag/MyCode/BFR-Clustering/")
+# Fix this
+setwd("MyCode/BFR-Clustering/")
 
 
 
