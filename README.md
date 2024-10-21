@@ -1,5 +1,6 @@
 # BFR Clustering
- A first implementation of the Bradley, Fayyad and Reina (BFR) clustering algorithm implemented in R . It's in an early version and has not been tested thoroughly. Still prints out debug message.
+ A first implementation of the Bradley, Fayyad and Reina (BFR) clustering algorithm implemented in R . 
+ IMPORTANT! It's in an early alpha version and has not been tested thoroughly. 
 
 # How to run
-Fix working directory and source BFR.R. 
+source BFR.R
