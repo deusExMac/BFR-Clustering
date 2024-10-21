@@ -47,8 +47,21 @@ cat("\014")
 
 options(scipen=8)
 
-# Set properly this!
-setwd("/BFR-Clustering/")
+# Set the working directory to the directory the current .R file resides.
+# NOTE: Works only when file is executed with source()
+tryCatch(
+  {
+     setwd(getSrcDirectory(function(){})[1])
+  },
+  error = function(err) {
+    message(paste("\nERROR changing directory.\nHINT: Are you executing script via RStudio and not source()?\n>>> Original error follows:"))
+    err$message <- paste(err, sep = "", end='')
+    # Terminate
+    stop(err)
+  }
+)
+
+
 
 
 
@@ -60,8 +73,8 @@ library(cluster)
 source('BFR_Implementation.R')
 
 
-# Number of clusters. The J
-N_CLUSTERS <- 14
+
+
 
 # Reading this number of lines during
 # each read of file
@@ -101,7 +114,8 @@ NextFileChunk <- function(chunkSize=CHUNK_SIZE){
 
 cat('####################################################################\n')
 cat('Executing BFR with following hyperparameters:\n')
-cat('\tNumber of clusters:', N_CLUSTERS, '\n')
+cat('\tWorking directory:', getSrcDirectory(function(){})[1], '\n')
+cat('\tNumber of clusters:', NUMBER_OF_CLUSTERS, '\n')
 cat('\tMinimum cluster points (CS generation):', MINIMUM_CLUSTER_POINTS, '\n')
 cat('\tData file:', DATA_FILE, '\n')
 model <- detect_dm_csv(DATA_FILE, sep=",", header=TRUE)
@@ -138,7 +152,7 @@ goto(LAFCON, 1)
 # numbers starting from 1. Index name is a character data type, not a numeric 
 # one (i.e. [['1']] nor [[1]])
 # Print res[['DS']] to see structure.
-res <- BFR(callback=NextFileChunk, K=N_CLUSTERS)
+res <- BFR(callback=NextFileChunk, K=NUMBER_OF_CLUSTERS)
 
 cat('\nBFR finished.\n')
 
@@ -158,7 +172,7 @@ cat('Executing K-means over same data\n')
 data <- read.csv(DATA_FILE, sep=",", header=T)
 
 # K-means with data in memory.
-classicKmeans <- kmeans(data, centers=as.matrix(data[sample(nrow(data), N_CLUSTERS), ]), iter.max=MAX_ITERATIONS)
+classicKmeans <- kmeans(data, centers=as.matrix(data[sample(nrow(data), NUMBER_OF_CLUSTERS), ]), iter.max=MAX_ITERATIONS)
 
 
 cat('Calculating silhouette scores (K-means, BFR)\n')
@@ -170,8 +184,8 @@ cat('\tK-means silhouette score:', mean(kmeansSilhouetteScore[,3]), '\n')
 
 # Calculate silhouette score for BFR clustering
 sc <- c()
-for (i in 1:N_CLUSTERS){
-  cat('Silhouette score for cluster', i, '\n')
+for (i in 1:NUMBER_OF_CLUSTERS){
+  cat('Silhouette score for cluster', i, '(# points:', nrow(..DEBUGVAR[['DS']][[as.character(i)]]), ')\n')
   # Use only 6 other clusters to calculate Silhouette score
   sc <- c( sc, ..DBGClusterSilhouetteScore(i, 6))
 }

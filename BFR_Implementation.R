@@ -38,8 +38,7 @@
 
 
 
-# The DEFAULT K in K-means value, if
-# no K is specified
+# The number of clusters to create
 NUMBER_OF_CLUSTERS <- 18
 
 # DEFAULT number of clusters for clustering outliers
@@ -58,7 +57,7 @@ INIT_BATCH_PCT <- 1
 
 # Minimum number of points a cluster must have
 # in order to not consider the points as outliers
-MINIMUM_CLUSTER_POINTS <- 4
+MINIMUM_CLUSTER_POINTS <- 3
 
 # Minimum number of points a cluster must have to add the 
 # cluster into the Compression set
@@ -1267,8 +1266,8 @@ initializeBFR <- function(initBatch, K=NUMBER_OF_CLUSTERS){
   }
   
   
-  # Initialization: Make a first attempt to cluster using K-means the batch. This will
-  # in clusters and the cluster size will separate clusters into outliers and inliers.
+  # Initialization: Make a first attempt to cluster the batch using K-means. This will
+  # separate clusters into outliers and inliers.
   # This is to make sure that the initial set of K clusters have enough data. 
   # Clusters with more than MINIMUM_CLUSTER_POINTS points will be considered for
   # initial generation of Discard Set. Clusters with less than MINIMUM_CLUSTER_POINTS 
@@ -1288,10 +1287,7 @@ initializeBFR <- function(initBatch, K=NUMBER_OF_CLUSTERS){
     }
   } #for   
   
-  #stop('DEBUGGING!!!')
   
-  #print('DOING INLIERS')
-  #print( sprintf('>>>>>> inliers: %d rows', nrow(inliers)) )
   # Cluster inliers.
   print(sprintf("Clustering INLIERS. Data size:%d", nrow(inliers)))
   if (K >= nrow(inliers)){
