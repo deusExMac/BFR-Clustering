@@ -61,7 +61,7 @@ MINIMUM_CLUSTER_POINTS <- 3
 
 # Minimum number of points a cluster must have to add the 
 # cluster into the Compression set
-MINIMUM_CS_CLUSTER_POINTS <- 2
+MINIMUM_CS_CLUSTER_POINTS <- 17
 
 
 
@@ -927,10 +927,10 @@ CountBasedCSRSGeneration <- function(clusterData, kmeansClusters){
 
 
 
-#' Merges data in a data frame into clusters of a new cluster set, if clusters meet criteria. New
+#' Merges data in a data frame into clusters of a new cluster set (cs), if clusters meet criteria. New
 #' clusters will be added Compression Set. Clusters that do not meet criteria, remain in the RS.
 #' 
-#' @details Executes K-means on the data in the data frame. If K-means clusters have more points than 
+#' @details Executes K-means on the data on the data frame. If K-means clusters have more points than 
 #'          a threshold, clusters are added to a new cluster set. If K-means clusters have less data
 #'          than a threshold, data remains in the data frame. A large K value is used to force more 
 #'          detailed/compact clusters.
@@ -945,11 +945,6 @@ CountBasedCSRSGeneration <- function(clusterData, kmeansClusters){
 MergeDFIntoClusters <- function(rsdf, K=NUMBER_OF_OUTLIER_CLUSTERS){
   cs <- NULL
   rs <- rsdf[0, ]
-  
-  if (!"F1" %in% colnames(rsdf)){
-      print(colnames(rsdf))
-      stop('PROBLEM. Incorrect headers') 
-  }
   
   
   if (nrow(rsdf) == 1){
@@ -1174,13 +1169,7 @@ processBatch <- function(batch, ds, cs, rs, K=NUMBER_OF_CLUSTERS){
   #res <- lapply(batch, AddToClosestCluster, resultSet=res)
   
   for (r in 1:nrow(batch)){
-    if (!'F1' %in% colnames(res[['RS']])){
-        print(is.data.frame(res[['RS']]))
-        print(res[['RS']])
-        print('^^^^^^^^^^^^^^^^^^^')
-        print(colnames(res[['RS']]))
-        stop('INCONSISTENT HEADER - processBatch')
-    }
+    
     #cat('\tprocess Batch: FOR LOOP RS column names (before):', colnames(rs), '\n') 
     if (r%%100==0){
         cat(r, ' ')
@@ -1321,7 +1310,7 @@ initializeBFR <- function(initBatch, K=NUMBER_OF_CLUSTERS){
   
   cat('Step 2: Clustering remaining points (initial outliers)\n')
   
-  if (NUMBER_OF_OUTLIER_CLUSTERS >= nrow(outliers) ){
+  if (K >= nrow(outliers) ){
     # if clustering is not possible, add rows to the RS set
     if (nrow(outliers) > 0){
         #cat('before rbind clusters>outliers', colnames(rs), '\n')
@@ -1329,7 +1318,7 @@ initializeBFR <- function(initBatch, K=NUMBER_OF_CLUSTERS){
         #cat('after', colnames(rs), '\n')
     }
   } else {
-    outliersClusters <- kmeans(outliers, iter.max=MAX_ITERATIONS, centers=NUMBER_OF_OUTLIER_CLUSTERS)
+    outliersClusters <- kmeans(outliers, iter.max=MAX_ITERATIONS, centers=K)
     
     #showClusterDistribution(outliersClusters, outliers)
     # Outliers will generate the CS and RS
