@@ -3,5 +3,5 @@
  
  **IMPORTANT!** It's in an early alpha version and has not been tested thoroughly. 
 
-# How to run
+# How to execute
 source BFR.R
