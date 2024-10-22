@@ -1,5 +1,5 @@
 
-
+# Prefix for header
 PREFIX = 'F'
 NUM_DIMENSIONS = 20
 NUM_ROWS = 25400
