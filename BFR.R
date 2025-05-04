@@ -68,6 +68,7 @@ tryCatch(
 
 library(LaF)
 library(cluster)
+library(clusterCrit) # Calculating clustering metrics
 
 # Contains the BFR implementation used by this script 
 source('BFR_Implementation.R')
@@ -187,10 +188,49 @@ sc <- c()
 for (i in 1:NUMBER_OF_CLUSTERS){
   cat('Silhouette score for cluster', i, '(# points:', nrow(..DEBUGVAR[['DS']][[as.character(i)]]), ')\n')
   # Use only 6 other clusters to calculate Silhouette score
-  sc <- c( sc, ..DBGClusterSilhouetteScore(i, 6))
+  sc <- c( sc, ..DBGClusterSilhouetteScore(i, -1))
 }
 
-cat('\n\tBFR silhouette score:', mean(sc))
+cat('\n\tBFR silhouette score:', mean(sc), '\n')
+
+
+
+################################################
+#
+# Calculate some internal cluster metrics. 
+#
+################################################
+
+
+# Aggregate all data points into a single
+# frame. Needed to calculate metrics using the clusterCrit
+# library.
+
+tmpDF <- data.frame()
+for (i in 1:NUMBER_OF_CLUSTERS){ 
+     t<-..DEBUGVAR[['DS']][[as.character(i)]]
+     t$cluster <- i
+     tmpDF<-rbind(tmpDF, t) 
+}
+
+
+# Which metrics to calculate
+cMetrics <- c("Silhouette", "Log_SS_Ratio","McClain_Rao")
+
+icMetrics<-intCriteria(as.matrix(tmpDF[, c("F1", "F2")]), 
+                       tmpDF$cluster,
+                       cMetrics)
+
+r <- c()
+for (m in cMetrics){
+     r <- append(r, icMetrics[[tolower(m)]])
+}
+
+df <- data.frame(t(r))
+names(df) <- cMetrics
+print("Internal cluster metrics:")
+print(df)
+
 
 
 
