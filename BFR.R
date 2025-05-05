@@ -276,6 +276,16 @@ if (res[['DS']]$dim == 2){
            col=c("orange", "grey"), fill = c("orange", "grey") , cex=0.57)
 }
 
+# TODO: Plot if data has 2 dimensions
+par(mfrow=c(1,2))
 
+plot(tmpDF[, "F1"], tmpDF[, "F2"], 
+     main="Clustering points using BFR",
+     xlab="F1", ylab="F2", 
+     pch=16, col=tmpDF$cluster)
 
+plot(data[, "F1"], data[, "F2"], 
+     main="Clustering points using K-means",
+     xlab="F1", ylab="F2", 
+     pch=16, col=classicKmeans$cluster)
 
