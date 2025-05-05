@@ -283,9 +283,14 @@ plot(tmpDF[, "F1"], tmpDF[, "F2"],
      main="Clustering points using BFR",
      xlab="F1", ylab="F2", 
      pch=16, col=tmpDF$cluster)
+cent <- ClusterCenters(res[['DS']])
+points(cent[, 1], cent[, 2], pch=22, cex=1.2, col="blue", bg="orange", lwd=2)
+#pch = 24, cex=2, col="blue", bg="red", lwd=2
+# col='orange', bg="red", pch=15, cex=1.2
 
 plot(data[, "F1"], data[, "F2"], 
      main="Clustering points using K-means",
      xlab="F1", ylab="F2", 
      pch=16, col=classicKmeans$cluster)
+points(classicKmeans$centers[, 1], classicKmeans$centers[, 2], pch=21, cex=1.2, col="blue", bg="orange", lwd=2)
 
