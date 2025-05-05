@@ -837,7 +837,7 @@ MergeCSCluster <- function(cs){
          # Average Mahalanobis distance between clusters
          d <- MClusterDistance(cs[[as.character(allPairs[1,i])]], cs[[as.character(allPairs[2,i])]])
          if (d < STDEV_THRESHOLD*cs$dim){
-             cat('MERGING', allPairs[1,i], 'and', allPairs[2,i], '\n')
+             cat('\tMERGING', allPairs[1,i], 'and', allPairs[2,i], '\n')
              mergedPairs <- c(mergedPairs, allPairs[1,i])
              mergedPairs <- c(mergedPairs, allPairs[2,i])
              cs[[as.character(allPairs[1,i])]]$n <- cs[[as.character(allPairs[1,i])]]$n +
@@ -872,7 +872,7 @@ MergeCSCluster <- function(cs){
            oldNames <- names(cs)
            names(cs) <- newNames
            
-           cat('Total of [', cs$N, '] clusters\n')
+           cat('\tTotal of [', cs$N, '] clusters\n')
            if (cs$N > 0){
                for (k in 3:cs$N){
                     if (oldNames[k] == newNames[k]){
@@ -1187,7 +1187,7 @@ processBatch <- function(batch, ds, cs, rs, K=NUMBER_OF_CLUSTERS){
   
   # If CS is empty
   if (is.null(res[['CS']])){
-    cat('EMPTY CS set. Calling MergeDFIntoClusters RS data size: ', nrow(res[['RS']]), '\n')
+    cat('\tEMPTY CS set. Calling MergeDFIntoClusters RS data size: ', nrow(res[['RS']]), '\n')
     if (nrow(res[['RS']]) > 0){
        # Merge RS into CS and RS
        
@@ -1262,7 +1262,7 @@ initializeBFR <- function(initBatch, K=NUMBER_OF_CLUSTERS){
   # initial generation of Discard Set. Clusters with less than MINIMUM_CLUSTER_POINTS 
   # points will be added to to the Retained Set.
   
-  print(sprintf("Step 0: Initialization of initial batch. Batch size:%d", nrow(batch)))
+  cat(sprintf("Step 0: Initialization of initial batch. Batch size:%d", nrow(batch)), '\n')
   dataClusters <- kmeans(batch, iter.max=MAX_ITERATIONS, centers=as.matrix(batch[sample(nrow(batch), K), ]))
   for (i in 1:K){
     clusteredItems <- batch[which(dataClusters$cluster==i), ]
@@ -1278,7 +1278,7 @@ initializeBFR <- function(initBatch, K=NUMBER_OF_CLUSTERS){
   
   
   # Cluster inliers.
-  print(sprintf("Clustering INLIERS. Data size:%d", nrow(inliers)))
+  cat(sprintf("\tClustering INLIERS. Data size:%d", nrow(inliers)), '\n')
   if (K >= nrow(inliers)){
     message(sprintf('[BFR] Cannot generate initial DS sets. Inliers too few: expected > K=%d, found:%d', K, nrow(inliers)) )
     stop('Terminating.')

@@ -70,6 +70,9 @@ library(LaF)
 library(cluster)
 library(clusterCrit) # Calculating clustering metrics
 
+# printing formatted tables
+library(ascii)
+
 # Contains the BFR implementation used by this script 
 source('BFR_Implementation.R')
 
@@ -183,15 +186,19 @@ cat('Calculating silhouette scores (K-means, BFR)\n')
 kmeansSilhouetteScore <- silhouette(classicKmeans$cluster, dist(data))
 cat('\tK-means silhouette score:', mean(kmeansSilhouetteScore[,3]), '\n')
 
+#
 # Calculate silhouette score for BFR clustering
-sc <- c()
-for (i in 1:NUMBER_OF_CLUSTERS){
-  cat('Silhouette score for cluster', i, '(# points:', nrow(..DEBUGVAR[['DS']][[as.character(i)]]), ')\n')
-  # Use only 6 other clusters to calculate Silhouette score
-  sc <- c( sc, ..DBGClusterSilhouetteScore(i, -1))
-}
+# NOTE: this is an in-house implementation for testing
+#       purposes.
+#sc <- c()
+#for (i in 1:NUMBER_OF_CLUSTERS){
+#  cat('Silhouette score for cluster', i, '(# points:', nrow(..DEBUGVAR[['DS']][[as.character(i)]]), ')\n')
+  # Use all other clusters to calculate Silhouette score. Change -1 to specify 
+  # number of clusters to use
+#  sc <- c( sc, ..DBGClusterSilhouetteScore(i, -1))
+#}
 
-cat('\n\tBFR silhouette score:', mean(sc), '\n')
+#cat('\n\tBFR silhouette score:', mean(sc), '\n')
 
 
 
@@ -201,6 +208,21 @@ cat('\n\tBFR silhouette score:', mean(sc), '\n')
 #
 ################################################
 
+# Which metrics to calculate
+cMetrics <- c("Silhouette", "Log_SS_Ratio","McClain_Rao")
+
+kmeansMetrics<-intCriteria(as.matrix(data), 
+                           classicKmeans$cluster,
+                           cMetrics)
+
+# K-means row for data.frame to be displayed
+kmr <- c()
+for (m in cMetrics){
+  kmr <- append(kmr, kmeansMetrics[[tolower(m)]])
+}
+
+
+# Metrics for BFR 
 
 # Aggregate all data points into a single
 # frame. Needed to calculate metrics using the clusterCrit
@@ -214,8 +236,7 @@ for (i in 1:NUMBER_OF_CLUSTERS){
 }
 
 
-# Which metrics to calculate
-cMetrics <- c("Silhouette", "Log_SS_Ratio","McClain_Rao")
+
 
 icMetrics<-intCriteria(as.matrix(tmpDF[, c("F1", "F2")]), 
                        tmpDF$cluster,
@@ -227,10 +248,15 @@ for (m in cMetrics){
 }
 
 df <- data.frame(t(r))
-names(df) <- cMetrics
-print("Internal cluster metrics:")
-print(df)
+df <- rbind(df, kmr)
 
+# Display metrics
+names(df) <- cMetrics
+row.names(df) <- c('BFR', 'K-means')
+
+cat("Internal cluster metrics:\n")
+
+print( ascii(df, digits=5), type="rest" )
 
 
 
