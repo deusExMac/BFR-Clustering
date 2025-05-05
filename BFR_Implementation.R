@@ -57,11 +57,11 @@ INIT_BATCH_PCT <- 1
 
 # Minimum number of points a cluster must have
 # in order to not consider the points as outliers
-MINIMUM_CLUSTER_POINTS <- 3
+MINIMUM_CLUSTER_POINTS <- 8
 
 # Minimum number of points a cluster must have to add the 
 # cluster into the Compression set
-MINIMUM_CS_CLUSTER_POINTS <- 17
+MINIMUM_CS_CLUSTER_POINTS <- 80
 
 
 
