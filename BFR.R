@@ -285,6 +285,8 @@ plot(tmpDF[, "F1"], tmpDF[, "F2"],
      pch=16, col=tmpDF$cluster)
 cent <- ClusterCenters(res[['DS']])
 points(cent[, 1], cent[, 2], pch=22, cex=1.2, col="blue", bg="orange", lwd=2)
+text(cent[, 1], cent[, 2], labels=rownames(as.data.frame(cent)), col="white", pos=1, cex=1.5)
+
 #pch = 24, cex=2, col="blue", bg="red", lwd=2
 # col='orange', bg="red", pch=15, cex=1.2
 

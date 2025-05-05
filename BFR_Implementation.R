@@ -39,7 +39,7 @@
 
 
 # The number of clusters to create
-NUMBER_OF_CLUSTERS <- 18
+NUMBER_OF_CLUSTERS <- 6
 
 # DEFAULT number of clusters for clustering outliers
 # then generating the compression set (CS).
