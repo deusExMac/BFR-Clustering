@@ -944,6 +944,7 @@ CountBasedCSRSGeneration <- function(clusterData, kmeansClusters){
 #' @return a new list, representing a (partial) cluster set with the summarized clusters generated 
 #'         and a data frame containing the data that could not be clustered (are outliers). 
 #'
+#'TODO: IMPORTANT!!!!! Look at this again!!!!!! TEST IT!!!
 MergeDFIntoClusters <- function(rsdf, K=NUMBER_OF_OUTLIER_CLUSTERS){
   cs <- NULL
   rs <- rsdf[0, ]
@@ -985,6 +986,7 @@ MergeDFIntoClusters <- function(rsdf, K=NUMBER_OF_OUTLIER_CLUSTERS){
     
   } #for
   
+  cat('\tMergeDFIntoClusters: returning CS cluster:', cs[['N']], 'points. RS cluster:', nrow(rs), '\n')
   return(list('CS'=cs, 'RS'=rs))          
 }
 
@@ -1390,6 +1392,7 @@ BFR <- function(callback, K=NUMBER_OF_CLUSTERS){
   
     nBatches <- 0
     totalRows <- 0
+    
     res <- list('DS'=NULL, 'CS'=NULL, 'RS'=NULL)
     while(TRUE){
           batch <- callback() # TODO: add arguments to callback to avoid globals?
