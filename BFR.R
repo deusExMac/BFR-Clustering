@@ -73,6 +73,7 @@ library(clusterCrit) # Calculating clustering metrics
 # printing formatted tables
 library(ascii)
 
+
 # Contains the BFR implementation used by this script 
 source('BFR_Implementation.R')
 
@@ -261,36 +262,31 @@ print( ascii(df, digits=5), type="rest" )
 
 
 
-# Plot centers of BFR and result of plain simple Kmeans applied on the same data.
-# This is done only if data dimension is 2.
+
+
+# Plot if data has 2 dimensions
 if (res[['DS']]$dim == 2){
-    plot(-4:4, -4:4, type = "n")
-    # centers from BFR
-    cent <- ClusterCenters(res[['DS']])
-    points(cent[, 1], cent[, 2], col='orange', pch=15, cex=1.2)
-    
-    # kmeans centers
-    points(classicKmeans$centers[, 1], classicKmeans$centers[, 2], col='grey', pch=16, cex=1.2)
-    
-    legend("topright", legend=c("BFR centers", "K-means centers"),
-           col=c("orange", "grey"), fill = c("orange", "grey") , cex=0.57)
-}
+  
+   par(mfrow=c(1,2))
 
-# TODO: Plot if data has 2 dimensions
-par(mfrow=c(1,2))
-
-plot(tmpDF[, "F1"], tmpDF[, "F2"], 
-     main="Clustering points using BFR",
-     xlab="F1", ylab="F2", 
-     pch=16, col=tmpDF$cluster)
-cent <- ClusterCenters(res[['DS']])
-points(cent[, 1], cent[, 2], pch=22, cex=1.2, col="blue", bg="orange", lwd=2)
-text(cent[, 1], cent[, 2], labels=rownames(as.data.frame(cent)), col="white", pos=1, cex=1.5)
+   plot(tmpDF[, "F1"], tmpDF[, "F2"], 
+        main="Clustering points using BFR",
+        xlab="F1", ylab="F2", 
+        pch=16, col=tmpDF$cluster)
+   cent <- ClusterCenters(res[['DS']])
+   points(cent[, 1], cent[, 2], pch=22, cex=1.2, col="blue", bg="orange", lwd=2)
+   # TODO: Make cluster ids clearer on plot
+   # For ideas see: https://stackoverflow.com/questions/25631216/r-plots-is-there-a-way-to-draw-a-border-shadow-or-buffer-around-text-labels
+   text(cent[, 1], cent[, 2], 
+             labels=rownames(as.data.frame(cent)), 
+             pch=22, cex = 1.2, pos=1, col="white")
 
 
-plot(data[, "F1"], data[, "F2"], 
-     main="Clustering points using K-means",
-     xlab="F1", ylab="F2", 
-     pch=16, col=classicKmeans$cluster)
-points(classicKmeans$centers[, 1], classicKmeans$centers[, 2], pch=21, cex=1.2, col="blue", bg="orange", lwd=2)
+   plot(data[, "F1"], data[, "F2"], 
+        main="Clustering points using K-means",
+        xlab="F1", ylab="F2", 
+        pch=16, col=classicKmeans$cluster)
+   points(classicKmeans$centers[, 1], classicKmeans$centers[, 2], pch=21, cex=1.2, col="blue", bg="orange", lwd=2)
+
+} # only 2D data
 

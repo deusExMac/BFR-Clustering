@@ -782,7 +782,7 @@ MergeRSToDS <- function(rs, destC){
                    destC[[as.character(cIdx)]]$SUM <- destC[[as.character(cIdx)]]$SUM + as.numeric(rs[i,])
                    destC[[as.character(cIdx)]]$SUMSQ <- destC[[as.character(cIdx)]]$SUMSQ + as.numeric(rs[i,])^2
                    nMerged <- nMerged + 1
-                   cat('\t\tAdding RS index', i, 'to cluster id:', cIdx, '\n')
+                   #cat('\t\tAdding RS index', i, 'to cluster id:', cIdx, '\n')
                    ..DBGAddDataToDS(as.numeric(rs[i, ]), as.character(cIdx))
               } # for i 
               
