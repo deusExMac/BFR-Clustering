@@ -39,7 +39,7 @@
 
 
 # The number of clusters to create
-NUMBER_OF_CLUSTERS <- 6
+NUMBER_OF_CLUSTERS <- 8
 
 # DEFAULT number of clusters for clustering outliers
 # then generating the compression set (CS).
@@ -167,9 +167,10 @@ DEBUG_ENABLED <- TRUE
   
   #..DEBUGVAR[['DS']][[cid]][nrow(..DEBUGVAR[['DS']][[cid]]) + 1, ] <<- v
   
-  #cat('BEFORE', nrow( ..DEBUGVAR[['DS']][[destId]]), '\n')
+  cat('\tBEFORE DEST', nrow( ..DEBUGVAR[['DS']][[destId]]), '\n')
+  cat('\tBEFORE SRC', nrow( ..DEBUGVAR[['DS']][[srcId]]), '\n')
   ..DEBUGVAR[['DS']][[destId]] <<- rbind(..DEBUGVAR[['DS']][[destId]], ..DEBUGVAR[['CS']][[srcId]])
-  #cat('AFTER', nrow( ..DEBUGVAR[['DS']][[destId]]), '\n')
+  cat('\tAFTER', nrow( ..DEBUGVAR[['DS']][[destId]]), '\n')
 }
 
 
@@ -752,10 +753,11 @@ MergeClusterSets <- function(sourceC, destC){
 #'          data frame have been merged into the closest cluster.
 #'
 MergeRSToDS <- function(rs, destC){
-              cD <- Inf
-              cIdx <- -Inf
+              
               nMerged <- 0
               for (i in 1:nrow(rs)){
+                   cD <- Inf
+                   cIdx <- -Inf
                    if (i%%1000==0){
                        cat(' ', i, ' ')
                    }
@@ -780,7 +782,7 @@ MergeRSToDS <- function(rs, destC){
                    destC[[as.character(cIdx)]]$SUM <- destC[[as.character(cIdx)]]$SUM + as.numeric(rs[i,])
                    destC[[as.character(cIdx)]]$SUMSQ <- destC[[as.character(cIdx)]]$SUMSQ + as.numeric(rs[i,])^2
                    nMerged <- nMerged + 1
-                   
+                   cat('\t\tAdding RS index', i, 'to cluster id:', cIdx, '\n')
                    ..DBGAddDataToDS(as.numeric(rs[i, ]), as.character(cIdx))
               } # for i 
               
@@ -1404,6 +1406,7 @@ BFR <- function(callback, K=NUMBER_OF_CLUSTERS){
               res[['CS']] <- NULL 
               
               cat('\tMerging RS into DS (RS rows:', nrow(res[['RS']]), ')...\n', sep='')
+              
               if (!is.null(res[['RS']]) && nrow(res[['RS']]) > 0 ){
                   res[['DS']] <- MergeRSToDS(res[['RS']], res[['DS']])
                   res[['RS']] <- NULL
