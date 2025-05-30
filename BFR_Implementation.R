@@ -61,7 +61,7 @@ MINIMUM_CLUSTER_POINTS <- 8
 
 # Minimum number of points a cluster must have to add the 
 # cluster into the Compression set
-MINIMUM_CS_CLUSTER_POINTS <- 22
+MINIMUM_CS_CLUSTER_POINTS <- 82
 
 
 
