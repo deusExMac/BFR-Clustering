@@ -61,7 +61,7 @@ MINIMUM_CLUSTER_POINTS <- 8
 
 # Minimum number of points a cluster must have to add the 
 # cluster into the Compression set
-MINIMUM_CS_CLUSTER_POINTS <- 80
+MINIMUM_CS_CLUSTER_POINTS <- 22
 
 
 
@@ -972,11 +972,14 @@ MergeDFIntoClusters <- function(rsdf, K=NUMBER_OF_OUTLIER_CLUSTERS){
     # NOTE: CS and RS in r are not clusters; they are data frames.
     if (is.null(r[['RS']])){
         cat('\t[count-based] CS:', nrow(r[['CS']]), '. Adding CS cluster.\n')
+        #cat('\t\t[count-based] Number of CS clusters:', length())
         cs <- AddClusterByCentroid(cs, nrow(r[['CS']]), 
                                  colSums(r[['CS']]),
                                  colSums(r[['CS']])^2)
         
+        
         ..DBGAddCSCluster(r[['CS']])
+        
         #write.table(clusterD, file = paste0('CS', i,'.csv'), append = TRUE, sep = ",", row.names = FALSE, col.names = !file.exists(paste0('CS', i, '.csv')))
     } # if
     else {
